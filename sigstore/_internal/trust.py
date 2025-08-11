@@ -40,6 +40,8 @@ from sigstore_models.trustroot import v1 as trustroot_v1
 
 from sigstore._internal.fulcio.client import FulcioClient
 from sigstore._internal.rekor import RekorLogSubmitter
+from sigstore._internal.rekor.client import RekorClient
+from sigstore._internal.rekor.client_v2 import RekorV2Client
 from sigstore._internal.timestamp import TimestampAuthorityClient
 from sigstore._utils import (
     KeyID,
@@ -404,9 +406,6 @@ class SigningConfig:
         """
         Returns the rekor transparency log clients to sign with.
         """
-        from sigstore._internal.rekor.client import RekorClient
-        from sigstore._internal.rekor.client_v2 import RekorV2Client
-
         result: list[RekorLogSubmitter] = []
         for tlog in self._tlogs:
             if tlog.major_api_version == 1:

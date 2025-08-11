@@ -56,13 +56,12 @@ from sigstore._utils import (
 from sigstore.errors import Error, VerificationError
 
 if typing.TYPE_CHECKING:
-    from sigstore._internal.trust import RekorKeyring
+    from sigstore._internal.trust import RekorKeyring, SigningConfig, TrustedRoot
 
 from pathlib import Path
 
 from sigstore_models.trustroot import v1 as trustroot_v1
 
-from sigstore._internal.trust import SigningConfig, TrustedRoot
 from sigstore._internal.tuf import DEFAULT_TUF_URL, STAGING_TUF_URL, TrustUpdater
 from sigstore.errors import TUFError
 
