@@ -17,7 +17,6 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
-import typing
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
 from sigstore_models.common.v1 import TimeRange
@@ -28,6 +27,7 @@ from sigstore_models.trustroot.v1 import (
 )
 
 from sigstore._internal.fulcio.client import FulcioClient
+from sigstore._internal.rekor.client import RekorClient
 from sigstore._internal.rekor.client_v2 import RekorV2Client
 from sigstore._internal.timestamp import TimestampAuthorityClient
 from sigstore._internal.trust import (
@@ -39,9 +39,6 @@ from sigstore._internal.trust import (
 )
 from sigstore.errors import Error
 from sigstore.models import ClientTrustConfig
-
-if typing.TYPE_CHECKING:
-    from sigstore._internal.rekor.client import RekorClient
 
 # Test data for TestSigningcconfig
 _service_v1_op1 = Service(url="url1", major_api_version=1, operator="op1")

@@ -19,13 +19,13 @@ Client trust configuration and trust root management for sigstore-python.
 from __future__ import annotations
 
 import logging
-import typing
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
+from typing import ClassVar, NewType
 
 import cryptography.hazmat.primitives.asymmetric.padding as padding
 from cryptography.exceptions import InvalidSignature
@@ -40,7 +40,6 @@ from sigstore_models.trustroot import v1 as trustroot_v1
 
 from sigstore._internal.fulcio.client import FulcioClient
 from sigstore._internal.rekor import RekorLogSubmitter
-from sigstore._internal.rekor.client_v2 import RekorV2Client
 from sigstore._internal.timestamp import TimestampAuthorityClient
 from sigstore._utils import (
     KeyID,
@@ -49,9 +48,6 @@ from sigstore._utils import (
     load_der_public_key,
 )
 from sigstore.errors import Error, MetadataError, VerificationError
-
-if typing.TYPE_CHECKING:
-    from sigstore._internal.rekor.client import RekorClient
 
 # Versions supported by this client
 REKOR_VERSIONS = [1, 2]
@@ -96,14 +92,14 @@ class Key:
     key: PublicKey
     key_id: KeyID
 
-    _RSA_SHA_256_DETAILS: typing.ClassVar = {
+    _RSA_SHA_256_DETAILS: ClassVar = {
         common_v1.PublicKeyDetails.PKCS1_RSA_PKCS1V5,
         common_v1.PublicKeyDetails.PKIX_RSA_PKCS1V15_2048_SHA256,
         common_v1.PublicKeyDetails.PKIX_RSA_PKCS1V15_3072_SHA256,
         common_v1.PublicKeyDetails.PKIX_RSA_PKCS1V15_4096_SHA256,
     }
 
-    _EC_DETAILS_TO_HASH: typing.ClassVar = {
+    _EC_DETAILS_TO_HASH: ClassVar = {
         common_v1.PublicKeyDetails.PKIX_ECDSA_P256_SHA_256: hashes.SHA256(),
         common_v1.PublicKeyDetails.PKIX_ECDSA_P384_SHA_384: hashes.SHA384(),
         common_v1.PublicKeyDetails.PKIX_ECDSA_P521_SHA_512: hashes.SHA512(),
@@ -222,8 +218,8 @@ class Keyring:
             raise VerificationError("keyring: invalid signature")
 
 
-RekorKeyring = typing.NewType("RekorKeyring", Keyring)
-CTKeyring = typing.NewType("CTKeyring", Keyring)
+RekorKeyring = NewType("RekorKeyring", Keyring)
+CTKeyring = NewType("CTKeyring", Keyring)
 
 
 class KeyringPurpose(str, Enum):
@@ -422,6 +418,9 @@ class SigningConfig:
         """
         Returns the rekor transparency log clients to sign with.
         """
+        from sigstore._internal.rekor.client import RekorClient
+        from sigstore._internal.rekor.client_v2 import RekorV2Client
+
         result: list[RekorLogSubmitter] = []
         for tlog in self._tlogs:
             if tlog.major_api_version == 1:
