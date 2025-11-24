@@ -21,6 +21,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import typing
 from abc import ABC
 from dataclasses import dataclass
 from typing import Any
@@ -38,7 +39,7 @@ from sigstore._internal.rekor import (
 )
 from sigstore.dsse import Envelope
 from sigstore.hashes import Hashed
-from sigstore.models import TransparencyLogEntry
+from sigstore._internal.rekor.entry import TransparencyLogEntry
 
 _logger = logging.getLogger(__name__)
 
@@ -151,7 +152,6 @@ class RekorEntries(_Endpoint):
         """
         Submit a new entry for inclusion in the Rekor log.
         """
-
         _logger.debug(f"proposed: {json.dumps(payload)}")
 
         resp: requests.Response = self.session.post(self.url, json=payload)

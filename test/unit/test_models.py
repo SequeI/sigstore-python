@@ -24,9 +24,9 @@ from sigstore.models import (
     Bundle,
     InvalidBundle,
     TimestampVerificationData,
-    TransparencyLogEntry,
     VerificationMaterial,
 )
+from sigstore._internal.rekor.entry import TransparencyLogEntry
 
 
 class TestTransparencyLogEntry:

@@ -17,7 +17,7 @@ import hashlib
 import pytest
 
 from sigstore import dsse
-from sigstore.models import TransparencyLogEntry
+from sigstore._internal.rekor.entry import TransparencyLogEntry
 
 
 @pytest.mark.staging

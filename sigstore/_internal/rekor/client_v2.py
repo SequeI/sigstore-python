@@ -21,6 +21,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import typing
 
 import requests
 from cryptography.hazmat.primitives import serialization
@@ -38,7 +39,7 @@ from sigstore._internal.rekor import (
 )
 from sigstore.dsse import Envelope
 from sigstore.hashes import Hashed
-from sigstore.models import TransparencyLogEntry
+from sigstore._internal.rekor.entry import TransparencyLogEntry
 
 _logger = logging.getLogger(__name__)
 
